@@ -7,5 +7,6 @@ public class MainMenuScript : MonoBehaviour
 {
    public void StartGame() {
         SceneManager.LoadScene(1);
+        PlayerPrefs.SetInt("Coins", 0); 
     }
 }

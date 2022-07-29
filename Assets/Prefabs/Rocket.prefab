@@ -555,10 +555,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9684f25039153844a91c00117ea81d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rocketThrust: 2
+  rocketThrust: 1000
   rocketRotateVal: 0.3
   RocketSound: {fileID: 8300000, guid: 827f209908ea7704d9c7977d9e720b9d, type: 3}
   RocketHit: {fileID: 8300000, guid: 367974281d0401a4c8981adc83683405, type: 3}
+  gamePaused: 0
+  CoinsCollected: 0
 --- !u!82 &1982094564
 AudioSource:
   m_ObjectHideFlags: 0

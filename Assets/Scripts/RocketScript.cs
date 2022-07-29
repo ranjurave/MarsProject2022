@@ -8,7 +8,7 @@ public class RocketScript : MonoBehaviour {
     AudioSource rocketAudio;
 
     [SerializeField]
-    float rocketThrust = 2.0f;
+    float rocketThrust = 1000.0f;
 
     [SerializeField]
     float rocketRotateVal = 0.3f;
@@ -19,37 +19,48 @@ public class RocketScript : MonoBehaviour {
     [SerializeField]
     AudioClip RocketHit;
 
+    public bool gamePaused = false;
+
     public int CoinsCollected;
 
     void Start()
     {
         rocketRB = GetComponent<Rigidbody>();
         rocketAudio = GetComponent<AudioSource>();
+        CoinsCollected = PlayerPrefs.GetInt("Coins");
     }
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space)) {
-            rocketRB.AddRelativeForce(Vector3.up * rocketThrust);
-            if (!rocketAudio.isPlaying) {
-                rocketAudio.PlayOneShot(RocketSound);
+        if (!gamePaused)
+        {
+            if (Input.GetKey(KeyCode.Space))
+            {
+                rocketRB.AddRelativeForce(Vector3.up * rocketThrust * Time.deltaTime);
+
+                if (!rocketAudio.isPlaying)
+                {
+                    rocketAudio.PlayOneShot(RocketSound);
+                }
+            }
+            else
+            {
+                rocketAudio.Stop();
             }
 
-        }
-        else {
-            rocketAudio.Stop();
-        }
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                rocketRB.freezeRotation = true;
+                transform.Rotate(Vector3.forward * rocketRotateVal * -1);
+                rocketRB.freezeRotation = false;
+            }
 
-        if (Input.GetKey(KeyCode.RightArrow)){
-            rocketRB.freezeRotation = true;
-            transform.Rotate(Vector3.forward * rocketRotateVal * -1);
-            rocketRB.freezeRotation = false;
-        }
-
-        if (Input.GetKey(KeyCode.LeftArrow)) {
-            rocketRB.freezeRotation = true;
-            transform.Rotate(Vector3.forward * rocketRotateVal * 1);
-            rocketRB.freezeRotation = false;
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                rocketRB.freezeRotation = true;
+                transform.Rotate(Vector3.forward * rocketRotateVal * 1);
+                rocketRB.freezeRotation = false;
+            }
         }
     }
 
@@ -64,6 +75,7 @@ public class RocketScript : MonoBehaviour {
         if (collision.gameObject.tag == "Finish") {
             //Debug.Log("Level Complete");
             int newScene = SceneManager.GetActiveScene().buildIndex+1;
+            PlayerPrefs.SetInt("Coins", CoinsCollected);
             SceneManager.LoadScene(newScene);
         }
     }
