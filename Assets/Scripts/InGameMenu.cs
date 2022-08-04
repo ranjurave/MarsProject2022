@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 
 
 public class InGameMenu : MonoBehaviour {
@@ -17,12 +18,28 @@ public class InGameMenu : MonoBehaviour {
     [SerializeField]
     GameObject pauseMenu;
 
+    [SerializeField]
+    GameObject gameOptions;
+
+    [SerializeField]
+    Toggle muteAudio;
+
+    Camera gameCamera;
+    AudioListener cameraAudio;
+
+    bool audioOn = true;
+
     void Start()
     {
         rocketScript = FindObjectOfType<RocketScript>();
+
+        gameCamera = FindObjectOfType<Camera>();
+        cameraAudio = gameCamera.GetComponent<AudioListener>();
+
         //coinHUDText = FindObjectOfType<TextMeshProUGUI>();
         hudObject.SetActive(true);
         pauseMenu.SetActive(false);
+        gameOptions.SetActive(false);
     }
 
     void Update()
@@ -54,5 +71,25 @@ public class InGameMenu : MonoBehaviour {
     {
         Debug.Log("Application Quitting");
         Application.Quit();
+    }
+
+    public void ShowOptions() {
+        gameOptions.SetActive(true);
+        pauseMenu.SetActive(false);
+    }
+
+    public void ShowPause() {
+        gameOptions.SetActive(false);
+        pauseMenu.SetActive(true);
+    }
+
+    public void MuteToggle() {
+        Debug.Log(muteAudio.isOn);
+        if (muteAudio.isOn) {
+            cameraAudio.enabled = false;
+        }
+        else {
+            cameraAudio.enabled = true;
+        }
     }
 }

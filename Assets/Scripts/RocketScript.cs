@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class RocketScript : MonoBehaviour {
     Rigidbody rocketRB;
     AudioSource rocketAudio;
+    ParticleSystem rockeParticle;
 
     [SerializeField]
     float rocketThrust = 1000.0f;
@@ -16,9 +17,6 @@ public class RocketScript : MonoBehaviour {
     [SerializeField]
     AudioClip RocketSound;
 
-    [SerializeField]
-    AudioClip RocketHit;
-
     public bool gamePaused = false;
 
     public int CoinsCollected;
@@ -27,7 +25,9 @@ public class RocketScript : MonoBehaviour {
     {
         rocketRB = GetComponent<Rigidbody>();
         rocketAudio = GetComponent<AudioSource>();
+        rockeParticle = GetComponent<ParticleSystem>();
         CoinsCollected = PlayerPrefs.GetInt("Coins");
+        rocketAudio.Stop();
     }
 
     void Update()
@@ -37,7 +37,8 @@ public class RocketScript : MonoBehaviour {
             if (Input.GetKey(KeyCode.Space))
             {
                 rocketRB.AddRelativeForce(Vector3.up * rocketThrust * Time.deltaTime);
-
+                rockeParticle.Play();
+                
                 if (!rocketAudio.isPlaying)
                 {
                     rocketAudio.PlayOneShot(RocketSound);
@@ -45,6 +46,7 @@ public class RocketScript : MonoBehaviour {
             }
             else
             {
+                rockeParticle.Stop();
                 rocketAudio.Stop();
             }
 
@@ -83,7 +85,7 @@ public class RocketScript : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         if(other.gameObject.tag == "Coin") {
             CoinsCollected++;
-            Debug.Log(CoinsCollected);
+            //Debug.Log(CoinsCollected);
             Destroy(other.gameObject);
         }
     }
